@@ -1,0 +1,290 @@
+
+# 1. BFS (Breadth First Search)
+
+from collections import deque
+
+def bfs(g, start, goal):
+    q = deque([(start, [start])])
+    visited = set()
+
+    while q:
+        node, path = q.popleft()
+
+        if node == goal:
+            return path
+
+        if node not in visited:
+            visited.add(node)
+            for n in g[node]:
+                q.append((n, path + [n]))
+
+g = {'A':['B','C'], 'B':['D'], 'C':['E'], 'D':['G'], 'E':['G'], 'G':[]}
+print(bfs(g, 'A', 'G'))
+
+
+# 2. DFS (Depth First Search)
+
+def dfs(g, start, goal):
+    stack = [(start, [start])]
+    visited = set()
+
+    while stack:
+        node, path = stack.pop()
+
+        if node == goal:
+            return path
+
+        if node not in visited:
+            visited.add(node)
+            for n in g[node]:
+                stack.append((n, path + [n]))
+
+g = {'A':['B','C'], 'B':['D'], 'C':['E'], 'D':['G'], 'E':['G'], 'G':[]}
+print(dfs(g, 'A', 'G'))
+
+
+# 3. UCS (Uniform Cost Search)
+
+import heapq
+
+def ucs(g, start, goal):
+    q = [(0, start, [start])]
+    visited = set()
+
+    while q:
+        cost, node, path = heapq.heappop(q)
+
+        if node == goal:
+            return path, cost
+
+        if node not in visited:
+            visited.add(node)
+            for n, c in g[node]:
+                heapq.heappush(q, (cost+c, n, path+[n]))
+
+g = {'A':[('B',2),('C',1)], 'B':[('D',2)], 'C':[('E',10)], 'D':[('G',2)], 'E':[('G',1)], 'G':[]}
+print(ucs(g, 'A', 'G'))
+
+
+# 4. Greedy Best First Search
+
+import heapq
+
+def greedy(g, h, start, goal):
+    q = [(h[start], start, [start])]
+    visited = set()
+
+    while q:
+        _, node, path = heapq.heappop(q)
+
+        if node == goal:
+            return path
+
+        if node not in visited:
+            visited.add(node)
+            for n in g[node]:
+                heapq.heappush(q, (h[n], n, path+[n]))
+
+g = {'A':['B','C'], 'B':['D'], 'C':['E'], 'D':['G'], 'E':['G'], 'G':[]}
+h = {'A':7, 'B':6, 'C':3, 'D':2, 'E':2, 'G':0}
+print(greedy(g, h, 'A', 'G'))
+
+
+# 5. A* Search
+
+import heapq
+
+def astar(g, h, start, goal):
+    q = [(h[start], 0, start, [start])]
+    visited = set()
+
+    while q:
+        f, cost, node, path = heapq.heappop(q)
+
+        if node == goal:
+            return path, cost
+
+        if node not in visited:
+            visited.add(node)
+            for n, c in g[node]:
+                new_cost = cost + c
+                heapq.heappush(q, (new_cost+h[n], new_cost, n, path+[n]))
+
+g = {'A':[('B',2),('C',1)], 'B':[('D',2)], 'C':[('E',10)], 'D':[('G',2)], 'E':[('G',1)], 'G':[]}
+h = {'A':7, 'B':6, 'C':3, 'D':2, 'E':2, 'G':0}
+print(astar(g, h, 'A', 'G'))
+
+
+# 6. Python Operators
+
+a = 10
+b = 5
+
+# Arithmetic Operators
+print(a+b, a-b, a*b, a/b, a//b, a%b, a**b)
+
+# Comparison Operators
+print(a==b, a!=b, a>b, a<b, a>=b, a<=b)
+
+# Logical Operators
+print(a>5 and b<10)
+print(a>5 or b>10)
+print(not(a>b))
+
+# Assignment Operators
+x = 10
+x += 5
+x -= 2
+x *= 2
+print(x)
+
+# Membership Operators
+print(5 in [1,2,5,10])
+print(7 not in [1,2,5,10])
+
+# Identity Operators
+x = [1,2]
+y = x
+print(x is y)
+print(x is not y)
+
+
+
+set a 
+# Student Result Management System
+
+name = input("Enter name: ")
+subjects = ["Math", "English", "Physics", "Chemistry", "ICT"]
+marks = {}
+
+for s in subjects:
+    marks[s] = int(input(s + " marks: "))
+
+def average(m):
+    return sum(m.values()) / len(m)
+
+total = sum(marks.values())
+avg = average(marks)
+
+if avg >= 80:
+    grade = "A+"
+elif avg >= 70:
+    grade = "A"
+elif avg >= 60:
+    grade = "B"
+elif avg >= 50:
+    grade = "C"
+else:
+    grade = "F"
+
+print("Name:", name)
+print("Marks:", marks)
+print("Total:", total)
+print("Average:", avg)
+print("Grade:", grade)
+
+
+# Greedy Best First Search
+
+import heapq
+
+def greedy(g, h, start, goal):
+    q = [(h[start], start, [start])]
+    visited = []
+
+    while q:
+        _, node, path = heapq.heappop(q)
+
+        if node in visited:
+            continue
+
+        visited.append(node)
+
+        if node == goal:
+            print("Explored Nodes:", visited)
+            print("Path:", " -> ".join(path))
+            return
+
+        for n in g[node]:
+            heapq.heappush(q, (h[n], n, path + [n]))
+
+g = {'A':['B','C'], 'B':['D','E'], 'C':['F'],
+     'D':[], 'E':[], 'F':[]}
+
+h = {'A':6, 'B':3, 'C':4, 'D':2, 'E':0, 'F':1}
+
+greedy(g, h, 'A', 'E')
+
+
+
+set b 
+
+
+# Book Management System
+
+name = input("Student Name: ")
+
+books = {
+    "Python": 5,
+    "Java": 3,
+    "C++": 4
+}
+
+selected = []
+total = 0
+
+def count_books(q):
+    return sum(q.values())
+
+for book in books:
+    qty = int(input("Borrow " + book + ": "))
+
+    if qty <= books[book] and qty > 0:
+        selected.append(book)
+        total += qty
+        books[book] -= qty
+    elif qty > books[book]:
+        print("Not Available:", book)
+
+print("Student:", name)
+print("Selected Books:", selected)
+print("Total Borrowed:", total)
+print("Status:", "Successful" if total > 0 else "No Books Borrowed")
+
+
+
+
+# Uniform Cost Search
+
+import heapq
+
+def ucs(g, start, goal):
+    q = [(0, start, [start])]
+    visited = []
+
+    while q:
+        cost, node, path = heapq.heappop(q)
+
+        if node in visited:
+            continue
+
+        visited.append(node)
+
+        if node == goal:
+            print("Explored Nodes:", visited)
+            print("Optimal Path:", " -> ".join(path))
+            print("Total Travel Cost:", cost)
+            return
+
+        for n, c in g[node]:
+            heapq.heappush(q, (cost+c, n, path+[n]))
+
+g = {
+    'A': [('B',2), ('C',5)],
+    'B': [('D',4), ('E',3)],
+    'C': [('E',2)],
+    'D': [('E',1)],
+    'E': []
+}
+
+ucs(g, 'A', 'E')
